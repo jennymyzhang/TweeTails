@@ -2,7 +2,7 @@ from django.db import models
 import string
 import random
 
-def generate_unique_code():
+def generate_unique_code(): #orm object relational mapping layer
     length = 6
     
     while True:
