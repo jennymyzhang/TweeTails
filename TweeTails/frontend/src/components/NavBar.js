@@ -24,8 +24,8 @@ const NavBar = () => {
   return (
     <AppBar>
       <Container maxWidth="lg">
-        <Toolbar sx={spcae}>
-          <Box sx={{}}>
+        <Toolbar disableGutters>
+          <Box sx={{ mr: 1 }}>
             <IconButton size="large" color="inherit">
               <Menu />
             </IconButton>
@@ -42,7 +42,7 @@ const NavBar = () => {
             <Button
               color="inherit"
               startIcon={<Lock />}
-              onClick={() => dispatch({ type: 'UPDATE_USER', payload: user })}
+              onClick={() => dispatch({ type: 'OPEN_LOGIN' })}
             >
               Login
             </Button>
