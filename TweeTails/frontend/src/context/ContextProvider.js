@@ -9,7 +9,8 @@ const initialState = {
   isAuthenticated: false,
   openLogin: false,
   loading: false,
-  alert: {open: false, severity: 'info', message:''}
+  alert: {open: false, severity: 'info', message:''},
+  profile: { open: false, file: null, photoURL: ''},
 
 };
 

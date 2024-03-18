@@ -4,7 +4,9 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
-    path('api/', include('api.urls'))
+    path('api/', include('api.urls')),
+    path('accounts/', include('accounts.urls')),
+         #GetUserDetails.as_view(), name='user-details')
 ]
 
 urlpatterns += [re_path(r'^.*', include('frontend.urls'))]

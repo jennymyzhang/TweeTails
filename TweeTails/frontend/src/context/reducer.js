@@ -17,10 +17,13 @@ const reducer = (state, action) => {
     case 'UPDATE_ALERT':
       return { ...state, alert: action.payload };
 
+    case 'UPDATE_PROFILE':
+      return { ...state, profile: action.payload };
+
+    case 'UPDATE_USER':
+      return { ...state, currentUser: action.payload };
+      
     case 'LOGIN_SUCCESS':
-      console.log(action)
-      localStorage.setItem('access', action.payload.access);
-      localStorage.setItem('refresh', action.payload.refresh);
       return { 
         ...state,
         isAuthenticated: true,
@@ -60,19 +63,19 @@ const reducer = (state, action) => {
           access: null,
           refresh: null,
           isAuthenticated: false,
-          user: null
+          currentUser: null
     }
     case 'ACTIVATION_FAIL':
     case 'ACTIVATION_SUCCESS':
       return {
           ...state
       }
-    case AUTHENTICATED_SUCCESS:
+    case 'AUTHENTICATED_SUCCESS':
       return {
           ...state,
           isAuthenticated: true
       }
-    case AUTHENTICATED_FAIL:
+    case 'AUTHENTICATED_FAIL':
       return {
           ...state,
           isAuthenticated: false

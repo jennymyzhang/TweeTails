@@ -19,7 +19,7 @@ import { Navigate } from 'react-router-dom';
 
 const Login = () => {
   const {
-    state: { openLogin },
+    state: { openLogin, isAuthenticated },
     dispatch,
   } = useValue();
   const [title, setTitle] = useState('Login');

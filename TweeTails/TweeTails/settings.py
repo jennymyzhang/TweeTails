@@ -157,7 +157,8 @@ CORS_ALLOWED_ORIGINS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
+        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -211,3 +212,4 @@ EMAIL_HOST_PASSWORD = 'zata ltmm bkmt ddbq'
 EMAIL_USE_TLS = True
 
 CSRF_TRUSTED_ORIGINS= ['http://127.0.0.1:8000/']
+CORS_ALLOW_ALL_ORIGINS = True

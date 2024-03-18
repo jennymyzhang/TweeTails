@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-
 export const load_user = async (dispatch) => {
     if (localStorage.getItem('access')) {
+        console.log("here2");
         const config = {
             headers: {
                 'Content-Type': 'application/json',
@@ -10,10 +10,12 @@ export const load_user = async (dispatch) => {
                 'Accept': 'application/json'
             }
         }; 
-
+        
+        console.log(config);
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/users/me/`, config);
-    
+            console.log("here");
+            const res = await axios.get('/auth/users/me/', config);
+            console.log(res)
             dispatch({
                 type: "USER_LOADED_SUCCESS",
                 payload: res.data
@@ -50,7 +52,14 @@ export const login = async(email, password, dispatch)  => {
             payload: res.data
         });
 
+        dispatch({
+            type: "CLOSE_LOGIN"
+        });
+
+        localStorage.setItem('access', res.data.access);
+        localStorage.setItem('refresh', res.data.refresh);
         load_user(dispatch);
+
     } catch (err) {
         dispatch({
             type: "LOGIN_FAIL"
@@ -70,6 +79,7 @@ export const login = async(email, password, dispatch)  => {
 
 export const signup = async (first_name, last_name, email, password, re_password, dispatch) => {
     console.log("signup")
+    dispatch({type: "START_LOADING"})
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -86,6 +96,7 @@ export const signup = async (first_name, last_name, email, password, re_password
             type: 'SIGNUP_SUCCESS',
             payload: res.data
         });
+        dispatch({type: "END_LOADING"})
         dispatch({
             type: "UPDATE_ALERT",
             payload: {
@@ -98,6 +109,7 @@ export const signup = async (first_name, last_name, email, password, re_password
         dispatch({
             type: 'SIGNUP_FAIL'
         })
+        dispatch({type: "END_LOADING"})
         dispatch({
             type: "UPDATE_ALERT",
             payload: {
@@ -110,6 +122,7 @@ export const signup = async (first_name, last_name, email, password, re_password
 };
 
 export const verify = async (uid, token, dispatch)  => {
+    dispatch({type: "START_LOADING"})
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -132,6 +145,7 @@ export const verify = async (uid, token, dispatch)  => {
                 message: 'Verification success!',
               },
         })
+        dispatch({type: "END_LOADING"})
     } catch (err) {
         console.log(err);
         dispatch({
@@ -161,6 +175,7 @@ export const checkAuthenticated = async(dispatch) => {
 
         try {
             const res = await axios.post('/auth/jwt/verify/', body, config)
+            console.log(res)
 
             if (res.data.code !== 'token_not_valid') {
                 dispatch({
@@ -182,4 +197,10 @@ export const checkAuthenticated = async(dispatch) => {
             type: 'AUTHENTICATED_FAIL'
         });
     }
+};
+
+export const logout = (dispatch) => {
+    dispatch({
+        type: 'LOGOUT'
+    });
 };
