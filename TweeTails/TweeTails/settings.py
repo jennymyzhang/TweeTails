@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
-    'api.apps.ApiConfig',
+    'animal.apps.AnimalConfig',
     'rest_framework',
     'djoser',
     'frontend.apps.FrontendConfig',
