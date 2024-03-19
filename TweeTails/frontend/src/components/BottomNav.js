@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     BottomNavigation,
     BottomNavigationAction,
@@ -9,7 +10,7 @@ import {
   import ClusterMap from './map/ClusterMap';
   import Rooms from './rooms/Rooms';
   import AddRoom from './addRoom/AddRoom';
-  
+
   const BottomNav = () => {
     const [value, setValue] = useState(0);
     const ref = useRef();
@@ -27,7 +28,7 @@ import {
         }
         <Paper
           elevation={3}
-          sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 2 }}
+          sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: -50 }}
         >
           <BottomNavigation
             showLabels
