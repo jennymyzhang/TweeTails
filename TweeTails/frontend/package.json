@@ -33,6 +33,7 @@
     "@mui/icons-material": "^5.15.13",
     "@mui/material": "^5.15.12",
     "axios": "^1.6.8",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "dropzone": "^6.0.0-beta.2",
     "firebase": "^10.9.0",
@@ -50,6 +51,8 @@
     "redux": "^5.0.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^3.1.0",
+    "supercluster": "^8.0.1",
+    "swiper": "^11.1.1",
     "url-loader": "^4.1.1",
     "web-vitals": "^2.1.4"
   }
