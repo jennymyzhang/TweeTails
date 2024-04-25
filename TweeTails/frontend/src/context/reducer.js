@@ -102,10 +102,49 @@ const reducer = (state, action) => {
         details: { title: '', description: '', price: 0 },
         location: { lng: 0, lat: 0 },
       };
-      
-      default:
-      throw new Error('No matched action!');
+
+      case 'UPDATE_ROOMS':
+        return {
+          ...state,
+          rooms: action.payload,
+          addressFilter: null,
+          filteredRooms: action.payload,
+        };
+    
+      case 'FILTER_ADDRESS':
+        return {
+          ...state,
+          addressFilter: action.payload,
+          filteredRooms: applyFilter(
+            state.rooms,
+            action.payload,
+          ),
+        };
+      case 'CLEAR_ADDRESS':
+        return {
+          ...state,
+          addressFilter: null,
+          filteredRooms: state.rooms,
+        };
+      case 'UPDATE_ROOM':
+        return { ...state, room: action.payload };
+        default:
+          throw new Error('No matched action!');
   }
 };
 
 export default reducer;
+
+const applyFilter = (rooms, address) => {
+  let filteredRooms = rooms;
+  if (address) {
+    const { lng, lat } = address;
+    filteredRooms = filteredRooms.filter((room) => {
+      const lngDifference = lng > room.lng ? lng - room.lng : room.lng - lng;
+      const latDifference = lat > room.lat ? lat - room.lat : room.lat - lat;
+      return lngDifference <= 1 && latDifference <= 1;
+    });
+  }
+
+  return filteredRooms;
+};
