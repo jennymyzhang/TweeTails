@@ -72,7 +72,7 @@ const AddLocation = () => {
           onGeolocate={(e) =>
             dispatch({
               type: 'UPDATE_LOCATION',
-              payload: { lng: e.coords.longitude, lat: e.coords.latitude },
+              payload: { lng: e.coords.longitude, lat: e.coords.latitude },   //geocoder updates states longitude and latitude map flys on change of states
             })
           }
         />
