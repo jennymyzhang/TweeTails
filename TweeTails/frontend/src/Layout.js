@@ -4,6 +4,7 @@ import Loading from "./components/Loading";
 import { checkAuthenticated, load_user } from './actions/auth';
 import { useValue } from './context/ContextProvider';
 import BottomNav from './components/BottomNav';
+import Room from './components/rooms/Room';
 
 const Layout = ({children }) => {
     const {dispatch} = useValue()
@@ -19,6 +20,7 @@ const Layout = ({children }) => {
             <Notification />
             {children}
             <BottomNav />
+            <Room />
         </div>
     );
 };

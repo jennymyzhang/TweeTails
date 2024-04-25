@@ -56,3 +56,22 @@ export const createRoom = async (room, currentUser,  dispatch, setPage) => {
           });
     }
 };
+
+
+export const getRooms = async (dispatch) => {
+  const config = {
+      headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken,
+      }
+  };
+  
+  try {
+      const result = await axios.get('/animal/get-all/', config);
+      if (result) {
+          dispatch({ type: 'UPDATE_ROOMS', payload: result.data });
+      }
+  } catch (err) {
+    console.log(err)
+  }
+};
