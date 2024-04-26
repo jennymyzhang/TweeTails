@@ -13,16 +13,6 @@ const UserIcons = () => {
 
   return (
     <Box>
-      <IconButton size="large" color="inherit">
-        <Badge color="error" badgeContent={5}>
-          <Mail />
-        </Badge>
-      </IconButton>
-      <IconButton size="large" color="inherit">
-        <Badge color="error" badgeContent={20}>
-          <Notifications />
-        </Badge>
-      </IconButton>
       <Tooltip title="Open User Settings">
         <IconButton onClick={(e) => setAnchorUserMenu(e.currentTarget)}>
           <Avatar src={currentUser?.photoURL} alt={currentUser?.name}>

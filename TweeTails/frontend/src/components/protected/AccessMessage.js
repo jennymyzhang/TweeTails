@@ -6,10 +6,10 @@ import { useValue } from '../../context/ContextProvider';
 const AccessMessage = () => {
   const { dispatch } = useValue();
   return (
-    <Container sx={{ py: 5 }}>
+    <Container sx={{ pt: "7%" }}>
       <Alert severity="error" variant="outlined">
         <AlertTitle>Forbidden Access</AlertTitle>
-        Please login or register to access this page
+        Please login or register this page
         <Button
           variant="outlined"
           sx={{ ml: 2 }}

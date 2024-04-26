@@ -19,7 +19,7 @@ const ImagesList = () => {
     dispatch({ type: 'DELETE_IMAGE', payload: image });
     const imageName = image?.split(`${currentUser?.id}%2F`)[1]?.split('?')[0];
     try {
-      await deleteFile(`rooms/${currentUser?.id}/${imageName}`);
+      await deleteFile(`animals/${currentUser?.id}/${imageName}`);
     } catch (error) {
       console.log(error);
     }
@@ -38,7 +38,7 @@ const ImagesList = () => {
         <ImageListItem key={index} cols={1} rows={1}>
           <img
             src={image}
-            alt="rooms"
+            alt="animals"
             loading="lazy"
             style={{ height: '100%' }}
           />

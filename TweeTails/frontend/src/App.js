@@ -4,9 +4,9 @@ import Home from './pages/Home'
 import Activate from "./components/user/Activate";
 import Layout from "./Layout";
 
+
 const App = () => {
       return (
-            <>
             <Layout>
             <BrowserRouter>
                   <Routes>
@@ -15,7 +15,6 @@ const App = () => {
                   </Routes>
             </BrowserRouter>
             </Layout>
-            </>
       )
 }
   export default App;

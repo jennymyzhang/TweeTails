@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useValue } from '../../context/ContextProvider';
-import { getRooms } from '../../actions/room';
+import { getAnimals } from '../../actions/animal';
 import Map, { Marker, Popup } from 'react-map-gl';
 import Supercluster from 'supercluster';
 import './cluster.css';
 import { Avatar, Paper, Tooltip } from '@mui/material';
 import GeocoderInput from '../sidebar/GeocoderInput';
-import PopupRoom from './PopupRoom';
+import PopupAnimal from './PopupAnimal';
 
 const supercluster = new Supercluster({
   radius: 75,
@@ -15,7 +15,7 @@ const supercluster = new Supercluster({
 
 const ClusterMap = () => {
   const {
-    state: { filteredRooms },
+    state: { filteredAnimals },
     dispatch,
     mapRef,
   } = useValue();
@@ -26,31 +26,31 @@ const ClusterMap = () => {
   const [popupInfo, setPopupInfo] = useState(null);
 
   useEffect(() => {
-    getRooms(dispatch);
+    getAnimals(dispatch);
   }, []);
 
   useEffect(() => {
-    const points = filteredRooms.map((room) => ({
+    const points = filteredAnimals.map((animal) => ({
       type: 'Feature',
       properties: {
         cluster: false,
-        roomId: room.id,
-        price: room.price,
-        title: room.title,
-        description: room.description,
-        lng: room.lng,
-        lat: room.lat,
-        images: room.images,
-        uPhoto: room.uPhoto,
-        uName: room.uName,
+        animalId: animal.id,
+        price: animal.price,
+        title: animal.title,
+        description: animal.description,
+        lng: animal.lng,
+        lat: animal.lat,
+        images: animal.images,
+        uPhoto: animal.uPhoto,
+        uName: animal.uName,
       },
       geometry: {
         type: 'Point',
-        coordinates: [parseFloat(room.lng), parseFloat(room.lat)],
+        coordinates: [parseFloat(animal.lng), parseFloat(animal.lat)],
       },
     }));
     setPoints(points);
-  }, [filteredRooms]);
+  }, [filteredAnimals]);
 
   useEffect(() => {
     console.log(points);
@@ -68,7 +68,7 @@ const ClusterMap = () => {
       initialViewState={{ latitude: 51.5072, longitude: 0.1276 }}
       mapboxAccessToken={process.env.REACT_APP_MAP_TOKEN}
       mapStyle="mapbox://styles/mapbox/streets-v11"
-      style = {{ width: window.width, height: window.innerHeight}}
+      style = {{ width: window.width, height: window.innerHeight, borderRadius: '16px'}}
       ref={mapRef}
       onZoomEnd={(e) => setZoom(Math.round(e.viewState.zoom))}
     >
@@ -81,6 +81,7 @@ const ClusterMap = () => {
               key={`cluster-${cluster.id}`}
               longitude={longitude}
               latitude={latitude}
+              color = '#3C2A21'
             >
               <div
                 className="cluster-marker"
@@ -108,7 +109,7 @@ const ClusterMap = () => {
 
         return (
           <Marker
-            key={`room-${cluster.properties.roomId}`}
+            key={`animal-${cluster.properties.animalId}`}
             longitude={longitude}
             latitude={latitude}
           >
@@ -133,7 +134,7 @@ const ClusterMap = () => {
           focusAfterOpen={false}
           onClose={() => setPopupInfo(null)}
         >
-          <PopupRoom {...{ popupInfo }} />
+          <PopupAnimal {...{ popupInfo }} />
         </Popup>
       )}
     </Map>

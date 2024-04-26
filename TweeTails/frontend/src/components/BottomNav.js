@@ -3,13 +3,14 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   Box,
+  Container,
   Paper,
 } from '@mui/material';
-import { AddLocationAlt, Bed, LocationOn } from '@mui/icons-material';
+import { AddLocationAlt, Pets, LocationOn } from '@mui/icons-material';
 import { useEffect, useRef, useState } from 'react';
 import ClusterMap from './map/ClusterMap';
-import Rooms from './rooms/Rooms';
-import AddRoom from './addRoom/AddRoom';
+import Animals from './animals/Animals';
+import AddAnimal from './addAnimal/AddAnimal';
 import Protected from './protected/Protected';
 
 const BottomNav = () => {
@@ -23,26 +24,26 @@ const BottomNav = () => {
       {
         {
           0: <ClusterMap />,
-          1: <Rooms />,
+          1: <Animals />,
           2: (
             <Protected>
-              <AddRoom setPage={setValue} />
+              <AddAnimal setPage={setValue} />
             </Protected>
           ),
         }[value]
       }
       <Paper
-        elevation={3}
         sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 2 }}
       >
         <BottomNavigation
           showLabels
+          sx={{color: 'black', background: '#FFF6DC'}}
           value={value}
           onChange={(e, newValue) => setValue(newValue)}
         >
           <BottomNavigationAction label="Map" icon={<LocationOn />} />
-          <BottomNavigationAction label="Rooms" icon={<Bed />} />
-          <BottomNavigationAction label="Add" icon={<AddLocationAlt />} />
+          <BottomNavigationAction label="Spotted Animals" icon={<Pets />} />
+          <BottomNavigationAction label="Found an Animal?" icon={<AddLocationAlt />} />
         </BottomNavigation>
       </Paper>
     </Box>

@@ -95,7 +95,7 @@ const reducer = (state, action) => {
     case 'UPDATE_LOCATION':
       return { ...state, location: action.payload };
 
-    case 'RESET_ROOM':
+    case 'RESET_ANIMAL':
       return {
         ...state,
         images: [],
@@ -103,20 +103,20 @@ const reducer = (state, action) => {
         location: { lng: 0, lat: 0 },
       };
 
-      case 'UPDATE_ROOMS':
+      case 'UPDATE_ANIMALS':
         return {
           ...state,
-          rooms: action.payload,
+          animals: action.payload,
           addressFilter: null,
-          filteredRooms: action.payload,
+          filteredAnimals: action.payload,
         };
     
       case 'FILTER_ADDRESS':
         return {
           ...state,
           addressFilter: action.payload,
-          filteredRooms: applyFilter(
-            state.rooms,
+          filteredAnimals: applyFilter(
+            state.animals,
             action.payload,
           ),
         };
@@ -124,10 +124,10 @@ const reducer = (state, action) => {
         return {
           ...state,
           addressFilter: null,
-          filteredRooms: state.rooms,
+          filteredAnimals: state.animals,
         };
-      case 'UPDATE_ROOM':
-        return { ...state, room: action.payload };
+      case 'UPDATE_ANIMAL':
+        return { ...state, animal: action.payload };
         default:
           throw new Error('No matched action!');
   }
@@ -135,16 +135,16 @@ const reducer = (state, action) => {
 
 export default reducer;
 
-const applyFilter = (rooms, address) => {
-  let filteredRooms = rooms;
+const applyFilter = (animals, address) => {
+  let filteredAnimals = animals;
   if (address) {
     const { lng, lat } = address;
-    filteredRooms = filteredRooms.filter((room) => {
-      const lngDifference = lng > room.lng ? lng - room.lng : room.lng - lng;
-      const latDifference = lat > room.lat ? lat - room.lat : room.lat - lat;
+    filteredAnimals = filteredAnimals.filter((animal) => {
+      const lngDifference = lng > animal.lng ? lng - animal.lng : animal.lng - lng;
+      const latDifference = lat > animal.lat ? lat - animal.lat : animal.lat - lat;
       return lngDifference <= 1 && latDifference <= 1;
     });
   }
 
-  return filteredRooms;
+  return filteredAnimals;
 };

@@ -1,5 +1,5 @@
 .swiper {
-    background: #eee;
+    background: #FFF6DC;
     height: fit-content;
   }
   
@@ -11,3 +11,11 @@
     max-height: 400px;
     object-fit: cover;
   }
+
+  .swiper-button-prev {
+    color: #3C2A21; 
+}
+
+.swiper-button-next {
+    color: #3C2A21; 
+}

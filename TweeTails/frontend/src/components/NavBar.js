@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import { createTheme } from '@mui/material/styles';
+
 import {
   AppBar,
   Box,
@@ -8,11 +10,13 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { Lock, Menu } from '@mui/icons-material';
+import { Gradient, GradientRounded, Lock, Menu } from '@mui/icons-material';
 import photoURL from '../components/profile.jpeg';
 import { useValue } from '../context/ContextProvider';
 import UserIcons from './user/UserIcons';
 import Sidebar from './sidebar/Sidebar';
+import { withTheme } from '@emotion/react';
+
 
 const user = { name: 'test', photoURL };
 
@@ -25,26 +29,25 @@ const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <AppBar>
+    <AppBar elevation={0} sx={{background: '#FFF6DC'}}>
       <Container maxWidth="lg">
         <Toolbar disableGutters>
           <Box sx={{ mr: 1 }}>
-            <IconButton size="large" color="inherit" onClick={() => setIsOpen(true)}>
+            <IconButton size="large" onClick={() => setIsOpen(true)}>
               <Menu />
             </IconButton>
           </Box>
           <Typography
-            variant="h6"
-            component="h1"
+            variant="h4"
+            component="h4"
             noWrap
-            sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
+            sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, fontFamily: 'Luminari, fantasy', color: '#3C2A21', fontWeight: 'bold', fontsize: '50px'}}
           >
             TweeTails
           </Typography>
           {!currentUser ? (
-            <Button
-              color="inherit"
-              startIcon={<Lock />}
+            <Button 
+              startIcon={<Lock color='#3C2A21'/>}
               onClick={() => dispatch({ type: 'OPEN_LOGIN' })}
             >
               Login

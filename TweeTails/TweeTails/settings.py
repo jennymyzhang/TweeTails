@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -132,6 +133,8 @@ DATABASES = {
         'HOST': 'localhost'
     }
 }
+
+DATABASES["default"] = dj_database_url.parse("postgres://tweetails_user:MPYSRjXqXaMzPhK7fcqnZ5QkrNmD8IC9@dpg-com2cgol5elc73bsr7fg-a.ohio-postgres.render.com/tweetails")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

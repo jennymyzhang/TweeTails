@@ -6,7 +6,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { useValue } from '../../context/ContextProvider';
 
-const PopupRoom = ({ popupInfo }) => {
+const PopupAnimal = ({ popupInfo }) => {
   const { title, description, price, images } = popupInfo;
   const { dispatch } = useValue();
   return (
@@ -41,7 +41,7 @@ const PopupRoom = ({ popupInfo }) => {
               <Box
                 component="img"
                 src={url}
-                alt="room"
+                alt="animal"
                 sx={{
                   height: 255,
                   display: 'block',
@@ -50,7 +50,7 @@ const PopupRoom = ({ popupInfo }) => {
                   objectFit: 'cover',
                 }}
                 onClick={() =>
-                  dispatch({ type: 'UPDATE_ROOM', payload: popupInfo })
+                  dispatch({ type: 'UPDATE_ANIMAL', payload: popupInfo })
                 }
               />
             </SwiperSlide>
@@ -61,4 +61,4 @@ const PopupRoom = ({ popupInfo }) => {
   );
 };
 
-export default PopupRoom;
+export default PopupAnimal;

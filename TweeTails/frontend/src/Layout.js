@@ -3,9 +3,10 @@ import Notification from "./components/Notification";
 import Loading from "./components/Loading";
 import { checkAuthenticated, load_user } from './actions/auth';
 import { useValue } from './context/ContextProvider';
-import BottomNav from './components/BottomNav';
-import Room from './components/rooms/Room';
-
+import Animal from './components/Animals/Animal';
+import {
+    Container,
+  } from '@mui/material';
 const Layout = ({children }) => {
     const {dispatch} = useValue()
 
@@ -15,13 +16,12 @@ const Layout = ({children }) => {
     }, []);
 
     return (
-        <div>
+        <>
             <Loading />
             <Notification />
             {children}
-            <BottomNav />
-            <Room />
-        </div>
+            <Animal />
+        </>
     );
 };
 
