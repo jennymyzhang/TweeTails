@@ -3,6 +3,7 @@ from django.db import models
 class Animal(models.Model):
     lng = models.DecimalField(decimal_places=20, max_digits=100)
     lat = models.DecimalField(decimal_places=20, max_digits=100)
+    injured = models.BooleanField(default=False)
     description = models.CharField(max_length=1000)
     species = models.CharField(max_length=1000, default="")
     title = models.CharField(max_length=1000, default="")
