@@ -160,9 +160,6 @@ const Login = () => {
           {isRegister ? 'Login' : 'Register'}
         </Button>
       </DialogActions>
-      <DialogActions sx={{ justifyContent: 'center', py: '24px' }}>
-        <GoogleOneTapLogin />
-      </DialogActions>
     </Dialog>
   );
 };
