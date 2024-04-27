@@ -10,8 +10,9 @@ const envKeys = Object.keys(env).reduce((prev, next) => {
 module.exports = {
   entry: "./src/index.js",
   output: {
-    path: path.resolve(__dirname, "./static/frontend"),
+    path: path.resolve(__dirname, "./static"),
     filename: "main.js",
+    publicPath: '/',
   },
   module: {
     rules: [
