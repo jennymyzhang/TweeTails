@@ -12,7 +12,6 @@ import {
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useValue } from '../../context/ContextProvider';
-import GoogleOneTapLogin from './GoogleOneTapLogin';
 import PasswordField from './PasswordField';
 import { login, signup } from '../../actions/auth'
 import { Navigate } from 'react-router-dom';
@@ -160,9 +159,7 @@ const Login = () => {
           {isRegister ? 'Login' : 'Register'}
         </Button>
       </DialogActions>
-      <DialogActions sx={{ justifyContent: 'center', py: '24px' }}>
-        <GoogleOneTapLogin />
-      </DialogActions>
+
     </Dialog>
   );
 };
