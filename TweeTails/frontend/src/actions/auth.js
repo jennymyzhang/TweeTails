@@ -4,22 +4,11 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVe
 export const load_user = (dispatch) => {
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            if (user.emailVerified) {
-                // User is signed in and email is verified
-                dispatch({
-                    type: "USER_LOADED_SUCCESS",
-                    payload: user
-                });
-            } else {
-                dispatch({
-                    type: "UPDATE_ALERT",
-                    payload: {
-                        open: true,
-                        severity: 'warning',
-                        message: 'Please check your email for verification.',
-                    },
-                });
-            }
+            // User is signed in, email verification check is removed
+            dispatch({
+                type: "USER_LOADED_SUCCESS",
+                payload: user
+            });
         } else {
             dispatch({
                 type: "USER_LOADED_FAIL"
@@ -28,32 +17,25 @@ export const load_user = (dispatch) => {
     });
 };
 
+
 export const login = async (email, password, dispatch) => {
     dispatch({ type: "START_LOADING" });
-    
+
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        if (user.emailVerified) {
+        if (user) {
             dispatch({
                 type: "LOGIN_SUCCESS",
                 payload: user
             });
 
             dispatch({ type: "CLOSE_LOGIN" });
-            load_user(dispatch);
+            load_user(dispatch); // Call this function to load user data if needed
         } else {
             dispatch({
                 type: "LOGIN_FAIL"
-            });
-            dispatch({
-                type: "UPDATE_ALERT",
-                payload: {
-                    open: true,
-                    severity: 'warning',
-                    message: 'Please verify your email before logging in.',
-                },
             });
         }
     } catch (err) {
@@ -102,10 +84,6 @@ export const signup = async (first_name, last_name, email, password, re_password
             });
         }
 
-        // Send email verification after the profile update
-        await sendEmailVerification(user);
-        console.log("Email verification sent");
-
         dispatch({
             type: 'SIGNUP_SUCCESS',
             payload: user
@@ -116,7 +94,7 @@ export const signup = async (first_name, last_name, email, password, re_password
             payload: {
                 open: true,
                 severity: 'info',
-                message: 'Sign up success! Please check your email to verify your account',
+                message: 'Sign up success!',
             },
         });
     } catch (err) {
@@ -137,6 +115,7 @@ export const signup = async (first_name, last_name, email, password, re_password
 
     dispatch({ type: "END_LOADING" });
 };
+
 
 export const verify = async (dispatch) => {
     const user = auth.currentUser;
@@ -178,20 +157,9 @@ export const verify = async (dispatch) => {
 export const checkAuthenticated = (dispatch) => {
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            if (user.emailVerified) {
-                dispatch({
-                    type: 'AUTHENTICATED_SUCCESS'
-                });
-            } else {
-                dispatch({
-                    type: "UPDATE_ALERT",
-                    payload: {
-                        open: true,
-                        severity: 'warning',
-                        message: 'Please verify your email before logging in.',
-                    },
-                });
-            }
+            dispatch({
+                type: 'AUTHENTICATED_SUCCESS'
+            });
         } else {
             dispatch({
                 type: 'AUTHENTICATED_FAIL'
@@ -199,6 +167,7 @@ export const checkAuthenticated = (dispatch) => {
         }
     });
 };
+
 
 export const logout = async (dispatch) => {
     try {
