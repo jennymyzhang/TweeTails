@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'frontend.apps.FrontendConfig',
-    'accounts.apps.AccountsConfig',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist'
 ]
@@ -205,8 +204,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'frontend/static')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-AUTH_USER_MODEL = 'accounts.UserAccount'
 
 #Email tweetailsinfo@gmail.com
 #password TweeTails1126
