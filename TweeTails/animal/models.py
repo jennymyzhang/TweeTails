@@ -8,12 +8,11 @@ class Animal(models.Model):
     species = models.CharField(max_length=1000, default="")
     title = models.CharField(max_length=1000, default="")
     images = models.JSONField(default=list)
-    uid = models.IntegerField()
-    first_name = models.CharField()
-    last_name = models.CharField()
+    uid = models.CharField(max_length=1000, default="")
+    display_name = models.CharField()
     uPhoto = models.CharField(default="")
     created_at = models.DateTimeField(auto_now_add=True)
 
-    REQUIRED_FIELDS = ['lng', 'lat', 'description', 'title', 'first_name', 'last_name' ]
+    REQUIRED_FIELDS = ['lng', 'lat', 'description', 'title', 'display_name' ]
     def __str__(self):
         return self.title

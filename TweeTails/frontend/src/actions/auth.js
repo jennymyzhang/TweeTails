@@ -1,206 +1,212 @@
-import axios from 'axios';
+import { auth } from '../firebase/config';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signOut, onAuthStateChanged, updateProfile} from 'firebase/auth';
 
-export const load_user = async (dispatch) => {
-    if (localStorage.getItem('access')) {
-        console.log("here2");
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `JWT ${localStorage.getItem('access')}`,
-                'Accept': 'application/json'
+export const load_user = (dispatch) => {
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            if (user.emailVerified) {
+                // User is signed in and email is verified
+                dispatch({
+                    type: "USER_LOADED_SUCCESS",
+                    payload: user
+                });
+            } else {
+                dispatch({
+                    type: "UPDATE_ALERT",
+                    payload: {
+                        open: true,
+                        severity: 'warning',
+                        message: 'Please check your email for verification.',
+                    },
+                });
             }
-        }; 
-        
-        console.log(config);
-        try {
-            console.log("here");
-            const res = await axios.get('/auth/users/me/', config);
-            console.log(res)
-            dispatch({
-                type: "USER_LOADED_SUCCESS",
-                payload: res.data
-            });
-        } catch (err) {
+        } else {
             dispatch({
                 type: "USER_LOADED_FAIL"
             });
         }
-    } else {
-        dispatch({
-            type: "USER_LOADED_FAIL"
-        });
-    }
+    });
 };
 
-export const login = async(email, password, dispatch)  => {
-    dispatch({type: "START_LOADING"})
-    console.log(email+password);
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    };
-
-    const body = JSON.stringify({ email, password });
-
+export const login = async (email, password, dispatch) => {
+    dispatch({ type: "START_LOADING" });
+    
     try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
 
-        const res = await axios.post('auth/jwt/create/', body, config);
-        console.log(res);
-        dispatch({
-            type: "LOGIN_SUCCESS",
-            payload: res.data
-        });
+        if (user.emailVerified) {
+            dispatch({
+                type: "LOGIN_SUCCESS",
+                payload: user
+            });
 
-        dispatch({
-            type: "CLOSE_LOGIN"
-        });
-
-        localStorage.setItem('access', res.data.access);
-        localStorage.setItem('refresh', res.data.refresh);
-        load_user(dispatch);
-
+            dispatch({ type: "CLOSE_LOGIN" });
+            load_user(dispatch);
+        } else {
+            dispatch({
+                type: "LOGIN_FAIL"
+            });
+            dispatch({
+                type: "UPDATE_ALERT",
+                payload: {
+                    open: true,
+                    severity: 'warning',
+                    message: 'Please verify your email before logging in.',
+                },
+            });
+        }
     } catch (err) {
         dispatch({
             type: "LOGIN_FAIL"
-        })
-
+        });
         dispatch({
             type: "UPDATE_ALERT",
             payload: {
                 open: true,
                 severity: 'error',
                 message: 'No matched credentials, please check your email and password or sign up first',
-              },
-        })
+            },
+        });
     }
-    dispatch({type: "END_LOADING"})
+    dispatch({ type: "END_LOADING" });
 };
 
 export const signup = async (first_name, last_name, email, password, re_password, dispatch) => {
-    console.log("signup")
-    dispatch({type: "START_LOADING"})
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    };
-
-    const body = JSON.stringify({ first_name, last_name, email, password, re_password });
+    dispatch({ type: "START_LOADING" });
 
     try {
-        const res = await axios.post('/auth/users/', body, config);
-        console.log(res)
+        console.log("Starting signup");
+
+        // Ensure the user creation completes before proceeding
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        console.log("User created:", user);
+
+        // Try updating profile with first name and last name
+        try {
+            await updateProfile(user, {
+                displayName: `${first_name} ${last_name}`
+            });
+            console.log("Profile updated with full name");
+        } catch (updateError) {
+            console.error("Error updating profile:", updateError);
+            dispatch({
+                type: "UPDATE_ALERT",
+                payload: {
+                    open: true,
+                    severity: 'error',
+                    message: 'Failed to update profile. Please try again.',
+                },
+            });
+        }
+
+        // Send email verification after the profile update
+        await sendEmailVerification(user);
+        console.log("Email verification sent");
 
         dispatch({
             type: 'SIGNUP_SUCCESS',
-            payload: res.data
+            payload: user
         });
-        dispatch({type: "END_LOADING"})
+
         dispatch({
             type: "UPDATE_ALERT",
             payload: {
                 open: true,
                 severity: 'info',
                 message: 'Sign up success! Please check your email to verify your account',
-              },
-        })
+            },
+        });
     } catch (err) {
+        console.error("Error during signup:", err.message);
         dispatch({
             type: 'SIGNUP_FAIL'
-        })
-        dispatch({type: "END_LOADING"})
+        });
+
         dispatch({
             type: "UPDATE_ALERT",
             payload: {
                 open: true,
                 severity: 'error',
-                message: 'Sign up failed, please log in if you have an existing account or contact TweeTails for assistance',
-              },
-        })
+                message: 'Sign up failed, please log in if you have an existing account or contact support for assistance',
+            },
+        });
     }
+
+    dispatch({ type: "END_LOADING" });
 };
 
-export const verify = async (uid, token, dispatch)  => {
-    dispatch({type: "START_LOADING"})
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
+export const verify = async (dispatch) => {
+    const user = auth.currentUser;
+    if (user) {
+        try {
+            await sendEmailVerification(user);
+            dispatch({
+                type: 'ACTIVATION_SUCCESS',
+            });
+            dispatch({
+                type: "UPDATE_ALERT",
+                payload: {
+                    open: true,
+                    severity: 'info',
+                    message: 'Verification email sent!',
+                },
+            });
+        } catch (err) {
+            console.log(err);
+            dispatch({
+                type: 'ACTIVATION_FAIL'
+            });
+            dispatch({
+                type: "UPDATE_ALERT",
+                payload: {
+                    open: true,
+                    severity: 'error',
+                    message: 'Verification email failed to send, please try again',
+                },
+            });
         }
-    };
-
-    const body = JSON.stringify({ uid, token });
-
-    try {
-        await axios.post('/auth/users/activation/', body, config);
-
-        dispatch({
-            type: 'ACTIVATION_SUCCESS',
-        });
-        dispatch({
-            type: "UPDATE_ALERT",
-            payload: {
-                open: true,
-                severity: 'info',
-                message: 'Verification success!',
-              },
-        })
-        dispatch({type: "END_LOADING"})
-    } catch (err) {
-        console.log(err);
+    } else {
         dispatch({
             type: 'ACTIVATION_FAIL'
-        })
-        dispatch({
-            type: "UPDATE_ALERT",
-            payload: {
-                open: true,
-                severity: 'error',
-                message: 'Verification failed :( Please try again',
-              },
-        })
+        });
     }
 };
 
-export const checkAuthenticated = async(dispatch) => {
-    if (localStorage.getItem('access')) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        }; 
-
-        const body = JSON.stringify({ token: localStorage.getItem('access') });
-
-        try {
-            const res = await axios.post('/auth/jwt/verify/', body, config)
-            console.log(res)
-
-            if (res.data.code !== 'token_not_valid') {
+export const checkAuthenticated = (dispatch) => {
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            if (user.emailVerified) {
                 dispatch({
                     type: 'AUTHENTICATED_SUCCESS'
                 });
             } else {
                 dispatch({
-                    type: 'AUTHENTICATED_FAIL'
+                    type: "UPDATE_ALERT",
+                    payload: {
+                        open: true,
+                        severity: 'warning',
+                        message: 'Please verify your email before logging in.',
+                    },
                 });
             }
-        } catch (err) {
+        } else {
             dispatch({
                 type: 'AUTHENTICATED_FAIL'
             });
         }
-
-    } else {
-        dispatch({
-            type: 'AUTHENTICATED_FAIL'
-        });
-    }
+    });
 };
 
-export const logout = (dispatch) => {
-    dispatch({
-        type: 'LOGOUT'
-    });
+export const logout = async (dispatch) => {
+    try {
+        await signOut(auth);
+        dispatch({
+            type: 'LOGOUT'
+        });
+    } catch (err) {
+        console.error(err);
+    }
 };

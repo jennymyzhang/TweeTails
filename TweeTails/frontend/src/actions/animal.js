@@ -4,10 +4,12 @@ import Cookies from 'js-cookie';
 const csrfToken = Cookies.get('csrftoken');
 export const createAnimal = async (animal, currentUser,  dispatch, setPage) => {
     dispatch({ type: 'START_LOADING' });
+    console.log(currentUser)
+    console.log("token",currentUser.accessToken)
     const config = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `JWT ${localStorage.getItem('access')}`,
+            'Authorization': `Bearer ${currentUser.accessToken}`,
             'X-CSRFToken': csrfToken,
         }
     };
@@ -19,10 +21,9 @@ export const createAnimal = async (animal, currentUser,  dispatch, setPage) => {
         injured: animal.injured,
         title: animal.title,
         images: animal.images,
-        first_name: currentUser.first_name,
-        last_name: currentUser.last_name,
+        display_name: currentUser.displayName,
         uPhoto: currentUser.photoURL, 
-        uid: currentUser.id
+        uid: currentUser.uid
     });
 
     console.log(body)
@@ -31,7 +32,7 @@ export const createAnimal = async (animal, currentUser,  dispatch, setPage) => {
         console.log("here11" + body + config);
         const result = await axios.post('/animal/create/', body,  config);
         console.log(result)
-
+        
         if (result) {
             dispatch({
               type: 'UPDATE_ALERT',
