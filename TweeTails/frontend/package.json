@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "1.0.0",
   "description": "",
+  "homepage": ".",
   "main": "index.js",
   "scripts": {
     "dev": "webpack --mode development --watch",
